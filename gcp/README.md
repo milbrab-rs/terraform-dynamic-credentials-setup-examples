@@ -1,10 +1,10 @@
-# Bootstrapping trust between a TFC workspace and GCP
+# Bootstrapping trust between a tfe workspace and GCP
 
 This directory contains example code for setting up a Terraform Cloud workspace whose runs will be automatically authenticated to GCP using Workload Identity.
 
 The basic building blocks in `gcp.tf` will configure a workload identity pool and provider and create a service account that is bound to a particular Terraform Cloud workspace.
 
-The building blocks in `tfc-workspace.tf` will create that Terraform Cloud workspace and set all the configuration variables needed in order to allow runs to authenticate to GCP.
+The building blocks in `tfe-workspace.tf` will create that Terraform Cloud workspace and set all the configuration variables needed in order to allow runs to authenticate to GCP.
 
 ## How to use
 

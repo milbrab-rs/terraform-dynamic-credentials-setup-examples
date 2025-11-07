@@ -2,15 +2,15 @@
 # SPDX-License-Identifier: MPL-2.0
 
 provider "tfe" {
-  hostname = var.tfc_hostname
+  hostname = var.tfe_hostname
 }
 
 # Data source used to grab the project under which a workspace will be created.
 #
 # https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/data-sources/project
-data "tfe_project" "tfc_project" {
-  name         = var.tfc_project_name
-  organization = var.tfc_organization_name
+data "tfe_project" "tfe_project" {
+  name         = var.tfe_project_name
+  organization = var.tfe_organization_name
 }
 
 # Runs in this workspace will be automatically authenticated
@@ -18,9 +18,9 @@ data "tfe_project" "tfc_project" {
 #
 # https://registry.terraform.io/providers/hashicorp/tfe/latest/docs/resources/workspace
 resource "tfe_workspace" "my_workspace" {
-  name         = var.tfc_workspace_name
-  organization = var.tfc_organization_name
-  project_id   = data.tfe_project.tfc_project.id
+  name         = var.tfe_workspace_name
+  organization = var.tfe_organization_name
+  project_id   = data.tfe_project.tfe_project.id
 }
 
 # The following variables must be set to allow runs
@@ -30,7 +30,7 @@ resource "tfe_workspace" "my_workspace" {
 resource "tfe_variable" "enable_gcp_provider_auth" {
   workspace_id = tfe_workspace.my_workspace.id
 
-  key      = "TFC_GCP_PROVIDER_AUTH"
+  key      = "tfe_GCP_PROVIDER_AUTH"
   value    = "true"
   category = "env"
 
@@ -39,59 +39,59 @@ resource "tfe_variable" "enable_gcp_provider_auth" {
 
 # The provider name contains the project number, pool ID,
 # and provider ID. This information can be supplied using
-# this TFC_GCP_WORKLOAD_PROVIDER_NAME variable, or using
-# the separate TFC_GCP_PROJECT_NUMBER, TFC_GCP_WORKLOAD_POOL_ID,
-# and TFC_GCP_WORKLOAD_PROVIDER_ID variables below if desired.
+# this tfe_GCP_WORKLOAD_PROVIDER_NAME variable, or using
+# the separate tfe_GCP_PROJECT_NUMBER, tfe_GCP_WORKLOAD_POOL_ID,
+# and tfe_GCP_WORKLOAD_PROVIDER_ID variables below if desired.
 #
-resource "tfe_variable" "tfc_gcp_workload_provider_name" {
+resource "tfe_variable" "tfe_gcp_workload_provider_name" {
   workspace_id = tfe_workspace.my_workspace.id
 
-  key      = "TFC_GCP_WORKLOAD_PROVIDER_NAME"
-  value    = google_iam_workload_identity_pool_provider.tfc_provider.name
+  key      = "tfe_GCP_WORKLOAD_PROVIDER_NAME"
+  value    = google_iam_workload_identity_pool_provider.tfe_provider.name
   category = "env"
 
   description = "The workload provider name to authenticate against."
 }
 
 # Uncomment the following variables and comment out
-# tfc_gcp_workload_provider_name if you wish to supply this
+# tfe_gcp_workload_provider_name if you wish to supply this
 # information in separate variables instead!
 
-# resource "tfe_variable" "tfc_gcp_project_number" {
+# resource "tfe_variable" "tfe_gcp_project_number" {
 #   workspace_id = tfe_workspace.my_workspace.id
 
-#   key      = "TFC_GCP_PROJECT_NUMBER"
+#   key      = "tfe_GCP_PROJECT_NUMBER"
 #   value    = data.google_project.project.number
 #   category = "env"
 
 #   description = "The numeric identifier of the GCP project"
 # }
 
-# resource "tfe_variable" "tfc_gcp_workload_pool_id" {
+# resource "tfe_variable" "tfe_gcp_workload_pool_id" {
 #   workspace_id = tfe_workspace.my_workspace.id
 
-#   key      = "TFC_GCP_WORKLOAD_POOL_ID"
-#   value    = google_iam_workload_identity_pool.tfc_pool.workload_identity_pool_id
+#   key      = "tfe_GCP_WORKLOAD_POOL_ID"
+#   value    = google_iam_workload_identity_pool.tfe_pool.workload_identity_pool_id
 #   category = "env"
 
 #   description = "The ID of the workload identity pool."
 # }
 
-# resource "tfe_variable" "tfc_gcp_workload_provider_id" {
+# resource "tfe_variable" "tfe_gcp_workload_provider_id" {
 #   workspace_id = tfe_workspace.my_workspace.id
 
-#   key      = "TFC_GCP_WORKLOAD_PROVIDER_ID"
-#   value    = google_iam_workload_identity_pool_provider.tfc_provider.workload_identity_pool_provider_id
+#   key      = "tfe_GCP_WORKLOAD_PROVIDER_ID"
+#   value    = google_iam_workload_identity_pool_provider.tfe_provider.workload_identity_pool_provider_id
 #   category = "env"
 
 #   description = "The ID of the workload identity pool provider."
 # }
 
-resource "tfe_variable" "tfc_gcp_service_account_email" {
+resource "tfe_variable" "tfe_gcp_service_account_email" {
   workspace_id = tfe_workspace.my_workspace.id
 
-  key      = "TFC_GCP_RUN_SERVICE_ACCOUNT_EMAIL"
-  value    = google_service_account.tfc_service_account.email
+  key      = "tfe_GCP_RUN_SERVICE_ACCOUNT_EMAIL"
+  value    = google_service_account.tfe_service_account.email
   category = "env"
 
   description = "The GCP service account email runs will use to authenticate."
@@ -99,11 +99,11 @@ resource "tfe_variable" "tfc_gcp_service_account_email" {
 
 # The following variables are optional; uncomment the ones you need!
 
-# resource "tfe_variable" "tfc_gcp_audience" {
+# resource "tfe_variable" "tfe_gcp_audience" {
 #   workspace_id = tfe_workspace.my_workspace.id
 
-#   key      = "TFC_GCP_WORKLOAD_IDENTITY_AUDIENCE"
-#   value    = var.tfc_gcp_audience
+#   key      = "tfe_GCP_WORKLOAD_IDENTITY_AUDIENCE"
+#   value    = var.tfe_gcp_audience
 #   category = "env"
 
 #   description = "The value to use as the audience claim in run identity tokens"
@@ -127,7 +127,7 @@ resource "tfe_variable" "tfc_gcp_service_account_email" {
 # resource "tfe_variable" "enable_gcp_provider_auth_other_config" {
 #   workspace_id = tfe_workspace.my_workspace.id
 
-#   key      = "TFC_GCP_PROVIDER_AUTH_other_config"
+#   key      = "tfe_GCP_PROVIDER_AUTH_other_config"
 #   value    = "true"
 #   category = "env"
 
