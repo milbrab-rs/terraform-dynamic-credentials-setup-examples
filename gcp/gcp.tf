@@ -72,7 +72,7 @@ resource "google_iam_workload_identity_pool_provider" "tfe_provider" {
 #
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
 resource "google_service_account" "tfe_service_account" {
-  account_id   = "${var.company}tfe-service-account"
+  account_id   = "${var.company}-tfe-service-account"
   display_name = "Terraform Cloud Service Account"
 }
 
